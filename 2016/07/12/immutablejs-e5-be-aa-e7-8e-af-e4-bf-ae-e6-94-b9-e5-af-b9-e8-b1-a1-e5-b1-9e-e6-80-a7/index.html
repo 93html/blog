@@ -3,14 +3,24 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives | Zehao&#39;s Blog</title>
+  <title>ImmutableJS 循环修改对象属性 | Zehao&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Zehao's Blog">
-<meta property="og:url" content="https://www.93html.com/archives/index.html">
+  <meta name="description" content="最近拿ImmutableJS练手，发现最难的是思维的转变，由于ImmutableJS的任何操作都是返回一个新的值，所有以前我们用循环的方式去修改对象属性的方法，在ImmutableJS中是行不通的，我举一个例子，比如说有一个员工工资的数据如下：
+https://gist.github.com/93html/807befaa57c9fd6cee830e8017e05a33
+需要写一个方法，让每个员工">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ImmutableJS 循环修改对象属性">
+<meta property="og:url" content="https://www.93html.com/2016/07/12/immutablejs-e5-be-aa-e7-8e-af-e4-bf-ae-e6-94-b9-e5-af-b9-e8-b1-a1-e5-b1-9e-e6-80-a7/index.html">
 <meta property="og:site_name" content="Zehao's Blog">
+<meta property="og:description" content="最近拿ImmutableJS练手，发现最难的是思维的转变，由于ImmutableJS的任何操作都是返回一个新的值，所有以前我们用循环的方式去修改对象属性的方法，在ImmutableJS中是行不通的，我举一个例子，比如说有一个员工工资的数据如下：
+https://gist.github.com/93html/807befaa57c9fd6cee830e8017e05a33
+需要写一个方法，让每个员工">
+<meta property="og:updated_time" content="2016-12-15T07:37:11.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Zehao's Blog">
+<meta name="twitter:title" content="ImmutableJS 循环修改对象属性">
+<meta name="twitter:description" content="最近拿ImmutableJS练手，发现最难的是思维的转变，由于ImmutableJS的任何操作都是返回一个新的值，所有以前我们用循环的方式去修改对象属性的方法，在ImmutableJS中是行不通的，我举一个例子，比如说有一个员工工资的数据如下：
+https://gist.github.com/93html/807befaa57c9fd6cee830e8017e05a33
+需要写一个方法，让每个员工">
   
     <link rel="alternate" href="/atom.xml" title="Zehao&#39;s Blog" type="application/atom+xml">
   
@@ -63,225 +73,71 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/12/13/hello-world/" class="archive-article-date">
-  <time datetime="2016-12-13T06:16:16.000Z" itemprop="datePublished">Dec 13</time>
+        <section id="main"><article id="post-immutablejs-e5-be-aa-e7-8e-af-e4-bf-ae-e6-94-b9-e5-af-b9-e8-b1-a1-e5-b1-9e-e6-80-a7" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/12/immutablejs-e5-be-aa-e7-8e-af-e4-bf-ae-e6-94-b9-e5-af-b9-e8-b1-a1-e5-b1-9e-e6-80-a7/" class="article-date">
+  <time datetime="2016-07-12T10:44:06.000Z" itemprop="datePublished">2016-07-12</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/未分类/">未分类</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/12/13/hello-world/">Hello World!</a>
+    <h1 class="article-title" itemprop="name">
+      ImmutableJS 循环修改对象属性
     </h1>
   
 
-    </header>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近拿ImmutableJS练手，发现最难的是思维的转变，由于ImmutableJS的任何操作都是返回一个新的值，所有以前我们用循环的方式去修改对象属性的方法，在ImmutableJS中是行不通的，我举一个例子，比如说有一个员工工资的数据如下：</p>
+<p><a href="https://gist.github.com/93html/807befaa57c9fd6cee830e8017e05a33" target="_blank" rel="external">https://gist.github.com/93html/807befaa57c9fd6cee830e8017e05a33</a></p>
+<p>需要写一个方法，让每个员工的工资增长10%，我可能会这样写：</p>
+<p><a href="https://gist.github.com/93html/32566d4262881c0f508bc026a7b5120f" target="_blank" rel="external">https://gist.github.com/93html/32566d4262881c0f508bc026a7b5120f</a></p>
+<p>然而使用Immutable类型的话，每次forEach里的操作，都不会修改当前对象的属性，而是返回一个修改后的新值，所以正确的写法如下：</p>
+<p><a href="https://gist.github.com/93html/1b6c962177d1f9e6f60d8a25a54b4ad9" target="_blank" rel="external">https://gist.github.com/93html/1b6c962177d1f9e6f60d8a25a54b4ad9</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://www.93html.com/2016/07/12/immutablejs-e5-be-aa-e7-8e-af-e4-bf-ae-e6-94-b9-e5-af-b9-e8-b1-a1-e5-b1-9e-e6-80-a7/" data-id="ciwq20h0v000os18qf10dchdq" class="article-share-link">Share</a>
+      
+      
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/10/13/http-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          HTTP 学习笔记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/05/15/e7-bc-96-e7-a8-8b-e4-b8-8e-e9-98-b2-e8-9b-80-e7-89-99/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">编程与刷牙</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/10/13/http-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b0/" class="archive-article-date">
-  <time datetime="2016-10-13T07:13:14.000Z" itemprop="datePublished">Oct 13</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/10/13/http-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b0/">HTTP 学习笔记</a>
-    </h1>
-  
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/07/12/immutablejs-e5-be-aa-e7-8e-af-e4-bf-ae-e6-94-b9-e5-af-b9-e8-b1-a1-e5-b1-9e-e6-80-a7/" class="archive-article-date">
-  <time datetime="2016-07-12T10:44:06.000Z" itemprop="datePublished">Jul 12</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/07/12/immutablejs-e5-be-aa-e7-8e-af-e4-bf-ae-e6-94-b9-e5-af-b9-e8-b1-a1-e5-b1-9e-e6-80-a7/">ImmutableJS 循环修改对象属性</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/05/15/e7-bc-96-e7-a8-8b-e4-b8-8e-e9-98-b2-e8-9b-80-e7-89-99/" class="archive-article-date">
-  <time datetime="2016-05-15T06:55:22.000Z" itemprop="datePublished">May 15</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/05/15/e7-bc-96-e7-a8-8b-e4-b8-8e-e9-98-b2-e8-9b-80-e7-89-99/">编程与刷牙</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/03/14/sourcetree-e5-8e-8b-e7-bc-a9-e5-a4-9a-e6-ac-a1commit/" class="archive-article-date">
-  <time datetime="2016-03-14T09:13:59.000Z" itemprop="datePublished">Mar 14</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/03/14/sourcetree-e5-8e-8b-e7-bc-a9-e5-a4-9a-e6-ac-a1commit/">SourceTree 压缩多次commit</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-      
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/11/02/atom-e5-8d-87-e7-ba-a7-e5-90-8e-e9-81-87-e5-88-b0-e7-9a-84eslint-evalerror-e9-97-ae-e9-a2-98/" class="archive-article-date">
-  <time datetime="2015-11-02T06:36:16.000Z" itemprop="datePublished">Nov 2</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/11/02/atom-e5-8d-87-e7-ba-a7-e5-90-8e-e9-81-87-e5-88-b0-e7-9a-84eslint-evalerror-e9-97-ae-e9-a2-98/">Atom升级后遇到的eslint EvalError问题</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/09/29/mama2-ef-bc-9a-e8-a7-a3-e5-86-b3macbook-e6-92-ad-e6-94-beflash-e5-8f-91-e7-83-ad-e7-a5-9e-e5-99-a8/" class="archive-article-date">
-  <time datetime="2015-09-29T08:39:29.000Z" itemprop="datePublished">Sep 29</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/09/29/mama2-ef-bc-9a-e8-a7-a3-e5-86-b3macbook-e6-92-ad-e6-94-beflash-e5-8f-91-e7-83-ad-e7-a5-9e-e5-99-a8/">mama2：解决macbook播放flash发热神器</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/07/19/e6-97-a0-e9-a2-98/" class="archive-article-date">
-  <time datetime="2015-07-19T04:05:45.000Z" itemprop="datePublished">Jul 19</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/07/19/e6-97-a0-e9-a2-98/">无题</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/05/27/e5-8e-9f-e7-94-9fjs-e5-ae-9e-e7-8e-b0-each-e6-96-b9-e6-b3-95/" class="archive-article-date">
-  <time datetime="2015-05-27T10:16:29.000Z" itemprop="datePublished">May 27</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/05/27/e5-8e-9f-e7-94-9fjs-e5-ae-9e-e7-8e-b0-each-e6-96-b9-e6-b3-95/">原生js实现$.each()方法</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/03/26/bootstrap-less-requirejs-grunt-e5-bc-80-e5-8f-91-e7-8e-af-e5-a2-83-e5-ae-9e-e4-be-8b/" class="archive-article-date">
-  <time datetime="2015-03-26T07:14:38.000Z" itemprop="datePublished">Mar 26</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/03/26/bootstrap-less-requirejs-grunt-e5-bc-80-e5-8f-91-e7-8e-af-e5-a2-83-e5-ae-9e-e4-be-8b/">bootstrap + less + requirejs + grunt 开发环境实例</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-
-  <nav id="page-nav">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="page-number" href="/archives/page/3/">3</a><a class="extend next" rel="next" href="/archives/page/2/">__('next') &raquo;</a>
-  </nav>
 </section>
         
           <aside id="sidebar">

@@ -3,14 +3,33 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives | Zehao&#39;s Blog</title>
+  <title>原生js实现$.each()方法 | Zehao&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Zehao's Blog">
-<meta property="og:url" content="https://www.93html.com/archives/index.html">
+  <meta name="description" content="假设页面上有这些P元素&amp;amp;lt;p&amp;amp;gt;1&amp;amp;lt;/p&amp;amp;gt;
+&amp;amp;lt;p&amp;amp;gt;2&amp;amp;lt;/p&amp;amp;gt;
+&amp;amp;lt;p&amp;amp;gt;3&amp;amp;lt;/p&amp;amp;gt;
+&amp;amp;lt;p&amp;amp;gt;4&amp;amp;lt;/p&amp;amp;gt;
+$(&amp;apos;p&amp;apos;).each(function(){
+  conso">
+<meta property="og:type" content="article">
+<meta property="og:title" content="原生js实现$.each()方法">
+<meta property="og:url" content="https://www.93html.com/2015/05/27/e5-8e-9f-e7-94-9fjs-e5-ae-9e-e7-8e-b0-each-e6-96-b9-e6-b3-95/index.html">
 <meta property="og:site_name" content="Zehao's Blog">
+<meta property="og:description" content="假设页面上有这些P元素&amp;amp;lt;p&amp;amp;gt;1&amp;amp;lt;/p&amp;amp;gt;
+&amp;amp;lt;p&amp;amp;gt;2&amp;amp;lt;/p&amp;amp;gt;
+&amp;amp;lt;p&amp;amp;gt;3&amp;amp;lt;/p&amp;amp;gt;
+&amp;amp;lt;p&amp;amp;gt;4&amp;amp;lt;/p&amp;amp;gt;
+$(&amp;apos;p&amp;apos;).each(function(){
+  conso">
+<meta property="og:updated_time" content="2016-12-15T07:37:11.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Zehao's Blog">
+<meta name="twitter:title" content="原生js实现$.each()方法">
+<meta name="twitter:description" content="假设页面上有这些P元素&amp;amp;lt;p&amp;amp;gt;1&amp;amp;lt;/p&amp;amp;gt;
+&amp;amp;lt;p&amp;amp;gt;2&amp;amp;lt;/p&amp;amp;gt;
+&amp;amp;lt;p&amp;amp;gt;3&amp;amp;lt;/p&amp;amp;gt;
+&amp;amp;lt;p&amp;amp;gt;4&amp;amp;lt;/p&amp;amp;gt;
+$(&amp;apos;p&amp;apos;).each(function(){
+  conso">
   
     <link rel="alternate" href="/atom.xml" title="Zehao&#39;s Blog" type="application/atom+xml">
   
@@ -63,225 +82,170 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/12/13/hello-world/" class="archive-article-date">
-  <time datetime="2016-12-13T06:16:16.000Z" itemprop="datePublished">Dec 13</time>
+        <section id="main"><article id="post-e5-8e-9f-e7-94-9fjs-e5-ae-9e-e7-8e-b0-each-e6-96-b9-e6-b3-95" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/05/27/e5-8e-9f-e7-94-9fjs-e5-ae-9e-e7-8e-b0-each-e6-96-b9-e6-b3-95/" class="article-date">
+  <time datetime="2015-05-27T10:16:29.000Z" itemprop="datePublished">2015-05-27</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Javascript/">Javascript</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/12/13/hello-world/">Hello World!</a>
+    <h1 class="article-title" itemprop="name">
+      原生js实现$.each()方法
     </h1>
   
 
-    </header>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>假设页面上有这些P元素<code>&amp;lt;p&amp;gt;1&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;2&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;3&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;4&amp;lt;/p&amp;gt;</code></p>
+<pre><code>$(&apos;p&apos;).each(function(){
+  console.log(this.innerHTML);
+});
+`&lt;/pre&gt;
+
+## 如何用原生的js实现上面这个each方法呢？
+
+首先要理解这段代码的原理，这段代码可以分成3个部分，`$(&apos;p&apos;)`、`each()`和一个callback函数, 然后再扩展object对象，在扩展方法中调用`each()`。
+
+### 首先来看`$(&apos;p&apos;)`
+
+`$()`其实是一个函数
+&lt;pre&gt;`function $(){
+  return;
+}
+`&lt;/pre&gt;
+想要用这个函数返回页面所有的p元素可以这样写
+&lt;pre&gt;`function $(tag){
+  var result;
+  if(typeof tag ===&apos;string&apos;)
+    result = document.getElementsByTagName(&apos;p&apos;);
+
+    return result;
+}
+
+console.log($(&apos;p&apos;).length); // 4
+`&lt;/pre&gt;
+OK，搞定！jQuery的选择器的原理也不是很难嘛～
+
+### 再来看each()
+
+`each()`要做的事情就是传入一个数组对象，然后枚举出它每个元素，不就是循环嘛！So easy
+&lt;pre&gt;`function each(arr){
+  if(typeof arr === &apos;object&apos;){
+    for (var i = 0; i &amp;lt; arr.length; i++){
+    }
+  }
+}
+`&lt;/pre&gt;
+
+#### 万事具备只差callback
+
+callback只是一个函数，再每次遍历的时候去执行这个函数，所以只许对each函数略加修改即可
+&lt;pre&gt;`function each(arr, callback){
+  if(typeof arr === &apos;object&apos;){
+    for (var i = 0; i &amp;lt; arr.length; i++){
+      callback();
+    }
+  }
+}
+`&lt;/pre&gt;
+OK！劳资写好了，根本没有难度！跑下看看！
+&lt;pre&gt;`var $p = $(&apos;p&apos;);
+
+each($p, function(){
+  console.log(this.innerHTML);
+});
+`&lt;/pre&gt;
+此时打开控制台看到的结果：
+![](http://ww2.sinaimg.cn/large/80a06c8djw1esizdsk1h6j210q08s427.jpg)
+
+![](http://ww4.sinaimg.cn/large/80a06c8djw1esizk2j6w6j20g40g4gm8.jpg) **wtf？？**
+为什么`this`是这玩意？！
+好吧，这里的this属于全局性调用，也就是指向了window，[关于this的用法请看这里](http://www.ruanyifeng.com/blog/2010/04/using_this_keyword_in_javascript.html &quot;undefined&quot;)，**那么我要如何重新指定this呢？**
+
+### 改变this指向的神器：`Call()`
+
+&gt; 当调用一个函数时，可以赋值一个不同的 this 对象。this 引用当前对象，即 call 方法的第一个参数。
+</code></pre><blockquote>
+<pre><code>通过 call 方法，你可以在一个对象上借用另一个对象上的方法，比如Object.prototype.toString.call([])，就是一个Array对象借用了Object对象上的方法。
+简单来说，call方法就是在调用函数的同时，指定该函数的this指向call的第一个参数，并且传递若干个参数。
+OK!有办法了，还等什么！来改造一下each函数
+&lt;pre&gt;`function each(arr, callback){
+  if(typeof arr === &apos;object&apos;){
+    for (var i = 0; i &amp;lt; arr.length; i++){
+      callback.call(arr[i], i, arr[i]);
+      }
+    }
+}
+</code></pre></blockquote>
+<pre><code>var $p = $(&apos;p&apos;);
+
+each($p, function(){
+  console.log(this.innerHTML);
+});
+`&lt;/pre&gt;
+![](http://ww3.sinaimg.cn/large/80a06c8djw1esj37438qlj2122094tah.jpg)
+COOL！这就是俺要得效果～
+
+### 最后一步
+
+我想要把each方法直接作为对象的方法，这里要使用prototype对object对象进行扩展，[对prototype的使用请点击此处](http://blog.93html.com/javascripe-object-function-and-class-function/ &quot;undefined&quot;)
+&lt;pre&gt;`Object.prototype.each = function(func) {
+  return each(this, func);
+};
+`&lt;/pre&gt;
+Allright! 我也可以写出高逼格的代码啦～
+![](http://ww4.sinaimg.cn/large/80a06c8djw1esj3gtimbqj20jg0jgjsi.jpg)
+&lt;pre&gt;`$(&apos;p&apos;).each(function() {
+  console.log(this.innerHTML);
+});
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://www.93html.com/2015/05/27/e5-8e-9f-e7-94-9fjs-e5-ae-9e-e7-8e-b0-each-e6-96-b9-e6-b3-95/" data-id="ciwq20h00000as18qfh7iudk8" class="article-share-link">Share</a>
+      
+      
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/07/19/e6-97-a0-e9-a2-98/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          无题
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/03/26/bootstrap-less-requirejs-grunt-e5-bc-80-e5-8f-91-e7-8e-af-e5-a2-83-e5-ae-9e-e4-be-8b/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">bootstrap + less + requirejs + grunt 开发环境实例</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/10/13/http-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b0/" class="archive-article-date">
-  <time datetime="2016-10-13T07:13:14.000Z" itemprop="datePublished">Oct 13</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/10/13/http-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b0/">HTTP 学习笔记</a>
-    </h1>
-  
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/07/12/immutablejs-e5-be-aa-e7-8e-af-e4-bf-ae-e6-94-b9-e5-af-b9-e8-b1-a1-e5-b1-9e-e6-80-a7/" class="archive-article-date">
-  <time datetime="2016-07-12T10:44:06.000Z" itemprop="datePublished">Jul 12</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/07/12/immutablejs-e5-be-aa-e7-8e-af-e4-bf-ae-e6-94-b9-e5-af-b9-e8-b1-a1-e5-b1-9e-e6-80-a7/">ImmutableJS 循环修改对象属性</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/05/15/e7-bc-96-e7-a8-8b-e4-b8-8e-e9-98-b2-e8-9b-80-e7-89-99/" class="archive-article-date">
-  <time datetime="2016-05-15T06:55:22.000Z" itemprop="datePublished">May 15</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/05/15/e7-bc-96-e7-a8-8b-e4-b8-8e-e9-98-b2-e8-9b-80-e7-89-99/">编程与刷牙</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/03/14/sourcetree-e5-8e-8b-e7-bc-a9-e5-a4-9a-e6-ac-a1commit/" class="archive-article-date">
-  <time datetime="2016-03-14T09:13:59.000Z" itemprop="datePublished">Mar 14</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/03/14/sourcetree-e5-8e-8b-e7-bc-a9-e5-a4-9a-e6-ac-a1commit/">SourceTree 压缩多次commit</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-      
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/11/02/atom-e5-8d-87-e7-ba-a7-e5-90-8e-e9-81-87-e5-88-b0-e7-9a-84eslint-evalerror-e9-97-ae-e9-a2-98/" class="archive-article-date">
-  <time datetime="2015-11-02T06:36:16.000Z" itemprop="datePublished">Nov 2</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/11/02/atom-e5-8d-87-e7-ba-a7-e5-90-8e-e9-81-87-e5-88-b0-e7-9a-84eslint-evalerror-e9-97-ae-e9-a2-98/">Atom升级后遇到的eslint EvalError问题</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/09/29/mama2-ef-bc-9a-e8-a7-a3-e5-86-b3macbook-e6-92-ad-e6-94-beflash-e5-8f-91-e7-83-ad-e7-a5-9e-e5-99-a8/" class="archive-article-date">
-  <time datetime="2015-09-29T08:39:29.000Z" itemprop="datePublished">Sep 29</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/09/29/mama2-ef-bc-9a-e8-a7-a3-e5-86-b3macbook-e6-92-ad-e6-94-beflash-e5-8f-91-e7-83-ad-e7-a5-9e-e5-99-a8/">mama2：解决macbook播放flash发热神器</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/07/19/e6-97-a0-e9-a2-98/" class="archive-article-date">
-  <time datetime="2015-07-19T04:05:45.000Z" itemprop="datePublished">Jul 19</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/07/19/e6-97-a0-e9-a2-98/">无题</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/05/27/e5-8e-9f-e7-94-9fjs-e5-ae-9e-e7-8e-b0-each-e6-96-b9-e6-b3-95/" class="archive-article-date">
-  <time datetime="2015-05-27T10:16:29.000Z" itemprop="datePublished">May 27</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/05/27/e5-8e-9f-e7-94-9fjs-e5-ae-9e-e7-8e-b0-each-e6-96-b9-e6-b3-95/">原生js实现$.each()方法</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/03/26/bootstrap-less-requirejs-grunt-e5-bc-80-e5-8f-91-e7-8e-af-e5-a2-83-e5-ae-9e-e4-be-8b/" class="archive-article-date">
-  <time datetime="2015-03-26T07:14:38.000Z" itemprop="datePublished">Mar 26</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/03/26/bootstrap-less-requirejs-grunt-e5-bc-80-e5-8f-91-e7-8e-af-e5-a2-83-e5-ae-9e-e4-be-8b/">bootstrap + less + requirejs + grunt 开发环境实例</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-
-  <nav id="page-nav">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="page-number" href="/archives/page/3/">3</a><a class="extend next" rel="next" href="/archives/page/2/">__('next') &raquo;</a>
-  </nav>
 </section>
         
           <aside id="sidebar">
