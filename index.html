@@ -216,6 +216,112 @@
             
               
                 
+                <a class="post-title-link" href="/2016/12/27/Webpack-基本概念/" itemprop="url">
+                  Webpack 基本概念
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-12-27T12:40:10+08:00" content="2016-12-27">
+              2016-12-27
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Webpack 的核心概念可以分为：Entry point，Chunk，Module，这三者之间的关系可以用一张官方图片来解释：</p>
+<p><img src="http://webpack.github.io/assets/HMR.svg" alt="generated update chunks"></p>
+<h2 id="Entry-point"><a href="#Entry-point" class="headerlink" title="Entry point"></a><a href="http://webpack.github.io/docs/configuration.html#entry" target="_blank" rel="external">Entry point</a></h2><p>Entry point 是比较好理解的，指的是程序的入口文件，也是 Webpack 解析依赖的入口文件，Entry point 可以设置单入口或者多入口，以一个最简单的入口文件为例</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// index.js</span></div><div class="line"><span class="keyword">var</span> a = <span class="built_in">require</span>(<span class="string">'./a'</span>);</div><div class="line"></div><div class="line">a();</div></pre></td></tr></table></figure>
+<h2 id="Chunk"><a href="#Chunk" class="headerlink" title="Chunk"></a>Chunk</h2><p>Chunk 指的是经过编译后的代码包，Webpack 会将每个由用户定义的模块，转换成 Chunk 的形式，这些 Chunk 最终汇总到一个数组中，供运行时调用</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 原始的 a.js</span></div><div class="line"><span class="built_in">module</span>.export = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    alert(<span class="string">'Hello'</span>);</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">// 经过编译后的 chunk</span></div><div class="line"><span class="function"><span class="keyword">function</span>(<span class="params">module, exports, __webpack_require__</span>) </span>&#123;</div><div class="line"><span class="meta">    'use strict'</span>;</div><div class="line"></div><div class="line">    <span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        alert(<span class="string">'Hello'</span>);</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里 Chunk 转换的过程中还会调用 Loaders，Loaders 的作用是将非 JS 资源转换成字符串，并且提供运行时解析这些字符串的功能</p>
+<p>最终 Webpack 为模块代码外面包了一层 function，并且注入了 <code>module</code>、<code>exports</code> 和 <code>__webpack_require__</code> 3个参数，这些参数的定义看下文代码示例中的 <code>require</code> 方法</p>
+<h2 id="Module"><a href="#Module" class="headerlink" title="Module"></a>Module</h2><p>Module 是拥有如下结构的一个 <code>Object</code>，它的作用是保存 Chunk 的信息</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">exports</span>: &#123;&#125;,</div><div class="line">    <span class="attr">id</span>: <span class="number">3</span>,</div><div class="line">    <span class="attr">loaded</span>: <span class="literal">false</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>一个 Module 对应一个 Chunk，<code>exports</code> 保存了 Chunk 中输出的内容，<code>id</code> 为 Chunk 的索引，<code>loaded</code> 记录 Chunk 是否加载</p>
+<h2 id="它们是如何工作的？"><a href="#它们是如何工作的？" class="headerlink" title="它们是如何工作的？"></a>它们是如何工作的？</h2><p>Webpack Runtime 的一个简单实现</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> chunks = [</div><div class="line">    <span class="function"><span class="keyword">function</span>(<span class="params">module, exports, __webpack_require__</span>) </span>&#123;</div><div class="line"><span class="meta">        'use strict'</span>;</div><div class="line"></div><div class="line">        <span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">            alert(<span class="string">'Hello'</span>);</div><div class="line">        &#125;;</div><div class="line">    &#125;,</div><div class="line">    ...</div><div class="line">];</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">require</span>(<span class="params">id</span>) </span>&#123;</div><div class="line">    <span class="comment">// 定义 module 对象</span></div><div class="line">    <span class="keyword">var</span> <span class="built_in">module</span> = &#123;</div><div class="line">        <span class="attr">exports</span>: &#123;&#125;,</div><div class="line">        <span class="attr">id</span>: moduleId,</div><div class="line">        <span class="attr">loaded</span>: <span class="literal">false</span></div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    <span class="comment">// 执行 chunk</span></div><div class="line">    chunks[id].call(<span class="built_in">module</span>.exports, <span class="built_in">module</span>, <span class="built_in">module</span>.exports, <span class="built_in">require</span>);</div><div class="line"></div><div class="line">    <span class="built_in">module</span>.loaded = <span class="literal">true</span>;</div><div class="line"></div><div class="line">    <span class="comment">// 返回 module 的输出部分</span></div><div class="line">	<span class="keyword">return</span> <span class="built_in">module</span>.exports;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// entry point</span></div><div class="line"><span class="keyword">var</span> a = <span class="built_in">require</span>(<span class="number">0</span>); <span class="comment">// 这里的 require('./a') 会被替换为 chunk 的索引</span></div><div class="line"></div><div class="line">a();</div><div class="line"><span class="comment">//</span></div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/12/24/大幅提升-React-性能的6个建议/" itemprop="url">
                   大幅提升 React 性能的6个建议
                 </a>
@@ -617,7 +723,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -631,6 +737,13 @@
             </div>
           
 
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
           
 
         </nav>
