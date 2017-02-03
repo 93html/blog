@@ -262,7 +262,7 @@ mathjax:
 
 
 # Google Analytics
-#google_analytics:
+google_analytics: UA-77777540-1
 
 # CNZZ count
 #cnzz_siteid:
