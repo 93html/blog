@@ -18,5 +18,9 @@
     "hexo-renderer-marked": "^0.2.10",
     "hexo-renderer-stylus": "^0.3.1",
     "hexo-server": "^0.2.0"
+  },
+  "scripts": {
+    "start": "hexo serve",
+    "deploy": "hexo g -d"
   }
 }
