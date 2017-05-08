@@ -1,7 +1,7 @@
 ---
 title: Javascript 浮点数精度问题
 date: 2017-05-06 09:53:48
-tags: 技术
+categories: 技术
 ---
 ## 为什么0.1+0.2=0.30000000000000004？
 因为在计算机内部使用二进制储存浮点数（[IEEE 754](https://zh.wikipedia.org/zh-hans/IEEE_754)），其不能准确地表示0.1，0.2或0.3
